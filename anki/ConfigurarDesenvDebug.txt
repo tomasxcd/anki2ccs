@@ -1,0 +1,15 @@
+1) Instale o Eclipse Classic.
+2) No Eclipse, instale o PyDev a partir do Help/Install New Software usando o Update Site http://pydev.org/updates
+3) Instale o Python 27 de 32 bits
+4) Adicione o interpretador do Python no Eclipse em Window/Preferences|PyDev/Interpreters/Python Interpreter.
+5) Instale a biblioteca PyQt-4.9.6 versão em 32 bits para Python 27. (Link: http://sourceforge.net/projects/pyqt/files/PyQt4/PyQt-4.9.6/PyQt-Py2.7-x86-gpl-4.9.6-1.exe/download)
+6) Baixe os fontes de alguma versão do Anki (eu utilizei esta: http://ankisrs.net/download/mirror/archive/anki-2.0.8.tgz) [mas pode-se dar preferência para versões mais novas)
+7) Crie uma pasta AnkiDesenv em algum lugar da sua máquina com a seguinte estrutura:
+AnkiDesenv
+----Anki
+----addons
+8) Extraia os fontes do Anki (passo 6) no diretório Anki do passo 7
+9) Crie um novo projeto no eclipse chamado AnkiDesenv a partir de arquivos existentes e aponte para a pasta AnkiDesenv criada no passo 7.
+10) Crie uma nova configuração de Debug em Run/Debug Configurations... do tipo Python Run, escolhendo o projeto AnkiDesenv e o Main Module o arquivo runaki dentro do subdiretório Anki (pode ser necessário renomear esse arquivo para runanki.py para que o Debug Configurations consiga localizá-lo)
+11) Mude para a aba Arguments do Debug Configurations e indique -b .
+12) Clique em Apply e Debug e seja feliz! =)
