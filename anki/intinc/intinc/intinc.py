@@ -9,6 +9,7 @@ import os
 from aqt import mw
 from aqt.utils import showInfo
 from aqt.qt import *
+import aqt
 from PyQt4 import QtCore, QtGui
 
 try:
@@ -19,15 +20,33 @@ except AttributeError:
 
 icons_dir = os.path.join(mw.pm.addonFolder(), 'intinc', 'icons')
 
-def testFunction():
+def addRandomCard():
     # get the number of cards in the current collection, which is stored in
     # the main window
-    cardCount = mw.col.cardCount()
+    #cardCount = mw.col.cardCount()
     # show a message box
-    showInfo("Card count: %d" % cardCount)
+    #showInfo("Card count: %d" % cardCount)
+    addCardsDlg = aqt.dialogs.open("AddCards", mw)
+    
+    print addCardsDlg.editor
+    
+    editor = addCardsDlg.editor
+    
+    note = editor.note
+    flds = note.model()['flds']
+    
+    for n in range(len(note.fields)):
+        try:
+            note.fields[n] = "Carteado"
+        except IndexError:
+            break
+    editor.currentField = 0
+    editor.setNote(note, focus=True)
+    
+    print('Teste')
 
 action = QAction("Add Random Card", mw)
-mw.connect(action, SIGNAL("triggered()"), testFunction)
+mw.connect(action, SIGNAL("triggered()"), addRandomCard)
 
 mw.form.menuIntinc = QtGui.QMenu(mw.form.menuTools)
 icon = QtGui.QIcon()
