@@ -11,6 +11,7 @@ from aqt.utils import showInfo
 from aqt.qt import *
 import aqt
 from PyQt4 import QtCore, QtGui
+from anki.hooks import runHook
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -21,14 +22,13 @@ except AttributeError:
 icons_dir = os.path.join(mw.pm.addonFolder(), 'intinc', 'icons')
 
 def addRandomCard():
-    # get the number of cards in the current collection, which is stored in
-    # the main window
-    #cardCount = mw.col.cardCount()
-    # show a message box
-    #showInfo("Card count: %d" % cardCount)
+    addCard()
+def addCard():
     addCardsDlg = aqt.dialogs.open("AddCards", mw)
     
     print addCardsDlg.editor
+    
+    changeModel()
     
     editor = addCardsDlg.editor
     
@@ -44,6 +44,17 @@ def addRandomCard():
     editor.setNote(note, focus=True)
     
     print('Teste')
+
+def changeModel():
+    deck = mw.col
+    #m = deck.models.byName(u'Básico')
+    m = deck.models.byName(u'Omissão de Palavras')
+    deck.conf['curModel'] = m['id']
+    cdeck = deck.decks.current()
+    cdeck['mid'] = m['id']
+    deck.decks.save(cdeck)
+    runHook("currentModelChanged")
+    mw.reset()
 
 action = QAction("Add Random Card", mw)
 mw.connect(action, SIGNAL("triggered()"), addRandomCard)
