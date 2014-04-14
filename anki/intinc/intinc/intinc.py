@@ -12,6 +12,9 @@ from aqt.qt import *
 import aqt
 from PyQt4 import QtCore, QtGui
 from anki.hooks import runHook
+from .server import IntincServer
+
+from .util import *
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -23,38 +26,6 @@ icons_dir = os.path.join(mw.pm.addonFolder(), 'intinc', 'icons')
 
 def addRandomCard():
     addCard()
-def addCard():
-    addCardsDlg = aqt.dialogs.open("AddCards", mw)
-    
-    print addCardsDlg.editor
-    
-    changeModel()
-    
-    editor = addCardsDlg.editor
-    
-    note = editor.note
-    flds = note.model()['flds']
-    
-    for n in range(len(note.fields)):
-        try:
-            note.fields[n] = "Carteado"
-        except IndexError:
-            break
-    editor.currentField = 0
-    editor.setNote(note, focus=True)
-    
-    print('Teste')
-
-def changeModel():
-    deck = mw.col
-    #m = deck.models.byName(u'Básico')
-    m = deck.models.byName(u'Omissão de Palavras')
-    deck.conf['curModel'] = m['id']
-    cdeck = deck.decks.current()
-    cdeck['mid'] = m['id']
-    deck.decks.save(cdeck)
-    runHook("currentModelChanged")
-    mw.reset()
 
 action = QAction("Add Random Card", mw)
 mw.connect(action, SIGNAL("triggered()"), addRandomCard)
@@ -69,4 +40,20 @@ mw.form.menuIntinc.setTitle(_("&Integrated Inclusion"))
 mw.form.menuTools.addSeparator()
 mw.form.menuTools.addMenu(mw.form.menuIntinc)
 
+mw.form.menuIntinc.addAction(action)
+
+intinc_server = IntincServer(mw)
+
+def startServer():
+    intinc_server.startServer()
+
+def stopServer():
+    intinc_server.stopServer()
+
+action = QAction("Start Server", mw)
+mw.connect(action, SIGNAL("triggered()"), startServer)
+mw.form.menuIntinc.addAction(action)
+
+action = QAction("Stop Server", mw)
+mw.connect(action, SIGNAL("triggered()"), stopServer)
 mw.form.menuIntinc.addAction(action)
